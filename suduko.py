@@ -1,4 +1,6 @@
 # source: https://www.askpython.com/python/examples/sudoku-solver-in-python
+import random
+
 M = 9
 def puzzle(grid):
     # prints the suduko board with values
@@ -27,17 +29,17 @@ def solve(grid, row, col, num):
         for j in range(3):
             if grid[i + startRow][j + startCol] == num:
                 return False
-    return True
+    return True # num. does not exist in row, column of the grid
  
 def Suduko(grid, row, col):
-    # main function to solve suduko
+    # main function to traverse through the grid
     # recursive function
 
     if (row == M - 1 and col == M):
-        # puzzle solved
-        return True
+        # puzzle solved <last element of grid>
+        return True, grid
     if col == M:
-        # go to next row
+        # go to next row, column = 0
         row += 1
         col = 0
     if grid[row][col] > 0:
@@ -46,13 +48,13 @@ def Suduko(grid, row, col):
     for num in range(1, M + 1, 1): 
         # fill empty grid witn val. 1 - 9 untill it satisfies the position
         if solve(grid, row, col, num):
-            # num. satisfies the position
+            # num. satisfies the position <does not already exist in the row, column of the grid>
             grid[row][col] = num
             
             # check game over
             if Suduko(grid, row, col + 1):
-                return True
-        grid[row][col] = 0  # why this?
+                return True, grid # <check if solved>
+        grid[row][col] = 0  # <Unsolvable suduko>
     return False
 
 '''0 means the cells where no value is assigned'''
@@ -72,26 +74,35 @@ else:
     print("Solution does not exist:(")
 
 
+def generate_suduko(drop_how_many=27):
+    initial_grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    _,initial_grid = Suduko(grid, 0, 0)
+    for i in range(drop_how_many):
+            row = random.choice(range(0,9))
+            col = random.choice(range(0,9))
+            initial_grid[row][col] = 0
+    return initial_grid
 
-# genrates suduko game
-def next_number(row, col):
-    next_num_start = (3*row) % 9
-    next_num = (next_num_start + col + 1) % 9
-    if next_num == 0:
-        next_num = 1 
-    return next_num
-    # returns: [[1, 2, 3, 1, 2, 3, 1, 2, 3], [4, 5, 6, 4, 5, 6, 4, 5, 6], [7, 8, 1, 7, 8, 1, 7, 8, 1], [1, 2, 3, 1, 2, 3, 1, 2, 3], [4, 5, 6, 4, 5, 6, 4, 5, 6], [7, 8, 1, 7, 8, 1, 7, 8, 1], [1, 2, 3, 1, 2, 3, 1, 2, 3], [4, 5, 6, 4, 5, 6, 4, 5, 6], [7, 8, 1, 7, 8, 1, 7, 8, 1]]
-# def shuffle(grid):
+print(generate_suduko())
+# # genrates suduko game
+# def next_number(row, col):
+#     next_num_start = (3*row) % 9
+#     next_num = (next_num_start + col + 1) % 9
+#     if next_num == 0:
+#         next_num = 1 
+#     return next_num
+#     # returns: [[1, 2, 3, 1, 2, 3, 1, 2, 3], [4, 5, 6, 4, 5, 6, 4, 5, 6], [7, 8, 1, 7, 8, 1, 7, 8, 1], [1, 2, 3, 1, 2, 3, 1, 2, 3], [4, 5, 6, 4, 5, 6, 4, 5, 6], [7, 8, 1, 7, 8, 1, 7, 8, 1], [1, 2, 3, 1, 2, 3, 1, 2, 3], [4, 5, 6, 4, 5, 6, 4, 5, 6], [7, 8, 1, 7, 8, 1, 7, 8, 1]]
+# # def shuffle(grid):
 
 
-def generateSuduko():
-    values = [[i for i in range(9)]]* 9
-    grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    for i in range(9):
-        for j in range(9):
-            grid[i][j] = next_number(i, j)
-            print(f'grid[{i}][{j}] = {grid[i][j]}')
-    print(grid)
-    puzzle(grid)
+# def generateSuduko():
+#     values = [[i for i in range(9)]]* 9
+#     grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+#     for i in range(9):
+#         for j in range(9):
+#             grid[i][j] = next_number(i, j)
+#             print(f'grid[{i}][{j}] = {grid[i][j]}')
+#     print(grid)
+#     puzzle(grid)
 
-generateSuduko()
+# generateSuduko()
