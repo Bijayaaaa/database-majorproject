@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease List</title>
+    <!-- Include Bootstrap from CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Disease List</h1>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Plant IDs</th>
+                    <th scope="col">Disease Name</th>
+                    <!-- <th scope="col">Image</th> -->
+                    <th scope="col">Timestamp</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for disease in diseases %}
+                    <tr>
+                        <td>{{ disease.plant_ids }}</td>
+                        <td>{{ disease.name }}</td>
+                        <!-- <td><img src="{{ disease.image_path }}" alt="Disease Image" class="img-thumbnail" style="max-width: 100px;"></td> -->
+                        <td>{{ disease.timestamp }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('delete_disease', disease_id=disease.id) }}">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form method="post" action="{{ url_for('add_disease') }}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Disease Name:</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Plant Id:</label>
+                <input type="text" name="plant_id" class="form-control" required>
+            </div>
+            <!-- <div class="form-group">
+                <label for="image">Image:</label>
+                <input type="file" name="image" class="form-control-file" accept="image/*" required>
+            </div> -->
+            <button type="submit" class="btn btn-primary">Add Disease</button>
+        </form>
+    </div>
+    <!-- Include Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
